@@ -140,22 +140,25 @@ def get_relative_P(img1, img2, kps1, kps2, matches):
                 valid_P = P
     # print(best_cnt, corrs.shape[0])
             
-    # P2 = [np.array([[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0]]), valid_P]
-    # pts = triangulate(P2, corrs)[:, :-1]
-    # # pts = []
-    # # for c in corrs:
-    # #     pts.append(triangulate(valid_P, c)[:-1])
-    # # pts = np.stack(pts)
-    # # print(pts.shape)
+    P2 = [np.array([[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0]]), valid_P]
+    pts = triangulate(P2, corrs)[:, :-1]
+    pts[:, 2] = -pts[:, 2]  # open3d is right hand coordinate
+    # pts = []
+    # for c in corrs:
+    #     pts.append(triangulate(valid_P, c)[:-1])
+    # pts = np.stack(pts)
+    # print(pts.shape)
         
-    # pred_pcd = o3d.geometry.PointCloud()
-    # # Map color
-    # colors = np.array([[0.7, 0., 0.] for l in pts])
-    # pred_pcd.points = o3d.utility.Vector3dVector(pts)
-    # pred_pcd.colors = o3d.utility.Vector3dVector(colors / 255)
+    pred_pcd = o3d.geometry.PointCloud()
+    # Map color
+    colors = np.array([[0.7, 0., 0.] for l in pts])
+    pred_pcd.points = o3d.utility.Vector3dVector(pts)
+    pred_pcd.colors = o3d.utility.Vector3dVector(colors / 255)
 
-    # # Visualize the input point cloud and the prediction
-    # o3d.visualization.draw_geometries([pred_pcd])
+    # Visualize the input point cloud and the prediction
+    mesh_frame = o3d.geometry.TriangleMesh.create_coordinate_frame(
+        size=0.6, origin=[0, 0, 0])
+    o3d.visualization.draw_geometries([pred_pcd, mesh_frame])
     return valid_P, matches
 
 
