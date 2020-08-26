@@ -52,7 +52,7 @@ class Patch:
             self.r = patch.r
             self.v = patch.v.copy()
             self.v_star = patch.v_star.copy()
-            self.cells = patch.cells.copy()
+            self.cells = []
             self.ref_idx = patch.ref_idx
             self.cross_x = patch.cross_x
             self.h = patch.h
